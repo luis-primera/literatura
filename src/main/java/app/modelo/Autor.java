@@ -19,7 +19,7 @@ public class Autor {
     private Integer anno_nacimiento;
     private Integer anno_fallecimiento;
 
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "autor", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Libro> libros= new ArrayList<>();
 
     public Autor(){}
@@ -71,12 +71,11 @@ public class Autor {
 
     @Override
     public String toString() {
-        return "----AUTOR-----" + "\n" +
-                "Nombre: " + nombre + "\n"+
-                "Fecha de Nacimiento: " + anno_nacimiento + "\n" +
-                "Fecha de Fallecimiento: " + anno_fallecimiento +"\n" +
-                "Libros: " + obtenerTitulosLibros() +
-                "-----------";
+        return
+                "🧑 Autor: " + nombre + "\n" +
+                "🎂 Fecha de Nacimiento: " + anno_nacimiento + "\n" +
+                "⚰️ Fecha de Fallecimiento: " + anno_fallecimiento + "\n" +
+                "📚 Libros: " + obtenerTitulosLibros();
     }
     private String obtenerTitulosLibros() {
         List<String> titulos = new ArrayList<>();

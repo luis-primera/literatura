@@ -73,6 +73,14 @@ public class Libro {
         this.autor = autor;
     }
 
+    @Override
+    public String toString() {
+        return
+                "📖 Titulo: " + titulo + "\n" +
+                      "📖 Lenguajes: " + lenguages + "\n" +
+                       "🌐 Descargas: " + descargas + "\n" +
+                        "🧑 Autor: " + autor.getNombre();
+    }
 
 }
 

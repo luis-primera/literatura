@@ -10,6 +10,7 @@ import app.servicio.BuscaLibro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Scanner;
 
 @Component
@@ -42,19 +43,23 @@ public class Principal {
                     break;
 
                 case 2:
-//                    listarLibros();
+                    listarLibrosRegistrados();
                     break;
 
                 case 3:
-//                    listarAutores();
+                    listarAutoresRegistrados();
                     break;
 
                 case 4:
-//                    listarAutoresVivosEnAnio();
+                    System.out.print("Ingrese el año que desea consultar: ");
+                    Integer anno = teclado.nextInt();
+                    listarAutoresVivosPorAnio(anno);
                     break;
 
                 case 5:
-//                    listarLibrosPorIdioma();
+                    System.out.print("Ingrese el idioma que desea consultar (por ejemplo: 'en' o 'es'): ");
+                    String idioma = teclado.nextLine();
+                    listarLibrosPorIdioma(idioma);
                     break;
 
                 case 0:
@@ -123,4 +128,72 @@ public class Principal {
 
     }
 
+    private void listarLibrosRegistrados() {
+        var libros = libroRepositorio.findAll();
+
+        if (libros.isEmpty()) {
+            System.out.println("📭 No hay libros registrados.");
+        } else {
+            System.out.println("📚 Libros registrados en la base de datos:");
+            System.out.println("---------------");
+            libros.forEach(libro -> {
+                System.out.println(libro.toString());
+                System.out.println("---------------");
+            });
+        }
+    }
+
+    private void listarAutoresRegistrados() {
+        var autores = autorRepositorio.findAll();
+
+        if (autores.isEmpty()) {
+            System.out.println("📭 No hay autores registrados.");
+        } else {
+            System.out.println("👨‍🏫 Autores registrados en la base de datos:");
+            System.out.println("---------------");
+            autores.forEach(autor -> {
+                System.out.println(autor.toString());
+                System.out.println("---------------");
+
+            });
+        }
+    }
+
+    public void listarAutoresVivosPorAnio(Integer anio) {
+        List<Autor> autoresVivos = autorRepositorio.findAutoresVivosEnAnio(anio);
+
+        System.out.println();
+        System.out.println();
+        System.out.println("-----------------------------");
+        System.out.println();
+        if (autoresVivos.size()>0){
+            System.out.println("📅 Autores vivos en el año " + anio + ":");
+            for (Autor autor : autoresVivos) {
+                System.out.println("👤 " + autor.getNombre());
+            }
+        }else {
+            System.out.println();
+            System.out.println("No hay autores vivos registrados en este año. 🙁");
+        }
+
+        System.out.println("-----------------------------");
+    }
+
+    public void listarLibrosPorIdioma(String idioma) {
+
+        try {
+            List<Libro> librosPorIdioma = libroRepositorio.findByLenguagesIgnoreCase(idioma);
+            System.out.println("-----------------------------");
+            if (librosPorIdioma.isEmpty()) {
+                System.out.println("📭 No se encontraron libros en el idioma: " + idioma);
+            } else {
+                System.out.println("📚 Libros en idioma '" + idioma + "':");
+                librosPorIdioma.forEach(libro -> System.out.println("📖 " + libro.getTitulo()));
+            }
+            System.out.println("-----------------------------");
+        } catch (Exception e){
+            System.out.println("Error al consultar los libros registrados por idioma.");
+        }
+
+    }
 }
