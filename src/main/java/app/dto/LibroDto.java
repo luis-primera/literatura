@@ -14,11 +14,15 @@ public record LibroDto(
 ) {
     @Override
     public String toString() {
-        return "Libro{" + '\'' +
-                "Titulo =" + titulo + '\'' +
-                ", Autor ='" + autorDto.get(0).nombre() + '\'' +
-                ", Lenguaje =" + lenguajes.get(0) + '\'' +
-                ", Descargas =" + descargas +
-                '}';
+        String autor = "No disponible";
+
+        if (autorDto != null && !autorDto.isEmpty()) {
+            autor = autorDto.get(0).nombre();
+        }
+        return  "---- LIBRO ----"+"\n" +
+                "📖 Titulo: " + titulo + "\n" +
+                "🧑 Autor: " + autor+"\n" +
+                "📖 Lenguajes: " + lenguajes.get(0) + "\n" +
+                "🌐 Descargas: " + descargas;
     }
 }

@@ -26,14 +26,14 @@ public class BuscaLibro {
                     .send(request, HttpResponse.BodyHandlers.ofString());
             ObjectMapper mapper = new ObjectMapper();
             ResultadoBusqueda resultadoBusqueda = mapper.readValue(response.body(), ResultadoBusqueda.class);
-
-            for (LibroDto libro : resultadoBusqueda.getResults()){
+            for (LibroDto libro : resultadoBusqueda.getResults()) {
                 libro.toString();
                 return libro;
             }
-
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println("Error eal buscar el libro.");
+            e.printStackTrace();
+            return null;
         }
         return null;
     }

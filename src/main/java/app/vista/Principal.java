@@ -9,7 +9,6 @@ import app.repositorio.LibroRepositorio;
 import app.servicio.BuscaLibro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -81,15 +80,17 @@ public class Principal {
             LibroDto libro = buscaLibro.obtenerLibro(tituloLibro);
             System.out.println("--------------------------------------------------------------------");
             System.out.println();
+            System.out.println("Libro encontrado:");
+            System.out.println();
             System.out.println(libro.toString());
-            AutorDto autor = libro.autorDto().get(0);
             System.out.println("--------------------------------------------------------------------");
             System.out.println();
-            System.out.println(autor.toString());
-            System.out.println("--------------------------------------------------------------------");
-            guardarLibroEnBaseDeDatos(libro);
+            if(libro!=null){
+                guardarLibroEnBaseDeDatos(libro);
+            }
             return libro;
         } catch (Exception e){
+            e.printStackTrace();
             System.out.println(" Error al buscar el libro: " + e.getMessage());
             return null;
         }
@@ -107,27 +108,32 @@ public class Principal {
     }
     private void guardarLibroEnBaseDeDatos(LibroDto libroDto) {
         try {
-            AutorDto autorDto = libroDto.autorDto().get(0);
-            var autorExistente = autorRepositorio.findByNombre(autorDto.nombre());
+            Autor autor = null;
 
-            Autor autor;
-            Libro libroGuardar = new Libro(libroDto);
-            if (autorExistente.isPresent()) {
-                autor = autorExistente.get();
-            }else {
-                autor = new Autor(autorDto);
-                autorRepositorio.save(autor);
+            if (libroDto.autorDto() != null && !libroDto.autorDto().isEmpty()) {
+                AutorDto autorDto = libroDto.autorDto().get(0);
+                var autorExistente = autorRepositorio.findByNombre(autorDto.nombre());
+
+                if (autorExistente.isPresent()) {
+                    autor = autorExistente.get();
+                } else {
+                    autor = new Autor(autorDto);
+                    autorRepositorio.save(autor);
+                    System.out.println("✅ Libro y autor guardados en la base de datos.");
+                }
+            } else {
+                System.out.println("⚠️ Libro sin autor. Se guardará con autor null.");
             }
-            libroGuardar.setAutor(autor); // Siempre se debe asociar el autor
+
+            Libro libroGuardar = new Libro(libroDto);
+            libroGuardar.setAutor(autor);
             libroRepositorio.save(libroGuardar);
 
-            System.out.println("✅ Libro y autor guardados en la base de datos.");
-        }catch (Exception e){
-            System.out.println("Error al guardar el libro. "+e.getMessage());
+            System.out.println("✅ Libro guardado en la base de datos.");
+        } catch (Exception e) {
+            System.out.println("❌ Error al guardar el libro: " + e.getMessage());
         }
-
     }
-
     private void listarLibrosRegistrados() {
         var libros = libroRepositorio.findAll();
 
