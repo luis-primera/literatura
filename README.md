@@ -37,7 +37,7 @@ Al seleccionar la opción "Salir", el programa se cierra de forma segura.
 ## 🎥 Video demostrativo
 
 > Puedes agregar una imagen o enlace aquí con el video de demostración:  
-> 📽️ [Ver demo](https://tulink.com)
+> 📽️ [Ver demo](https://youtu.be/2sUl67W2K-U)
 
 ## 🛠️ Tecnologías usadas
 
@@ -46,6 +46,7 @@ Al seleccionar la opción "Salir", el programa se cierra de forma segura.
 - API REST Gutendex (https://gutendex.com)
 - JPA + H2 (base de datos en memoria)
 - Maven
+- Postman
 
 ## ℹ️ Acerca del proyecto
 
